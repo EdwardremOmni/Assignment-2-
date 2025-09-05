@@ -4,6 +4,17 @@ from .serializers import MatchSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import requests
+from django.utils.dateparse import parse_datetime
+from datetime import datetime, timezone
+from .models import AugustFixture
+from .serializers import AugustFixtureSerializer
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .utils import dump_august_matches
+
+class AugustFixtureViewSet(viewsets.ModelViewSet):
+    queryset = AugustFixture.objects.all()
+    serializer_class = AugustFixtureSerializer
 
 class MatchViewSet(viewsets.ModelViewSet):
     queryset = Match.objects.all()
@@ -49,3 +60,27 @@ def import_fixtures(request):
         created += 1
 
     return Response({"created": created, "skipped": skipped})
+
+
+@api_view(["GET"])
+def august_fixtures(request):
+    matches = Match.objects.all()
+    august_list = []
+
+    for match in matches:
+        kickoff = match.kickoff_time
+        if kickoff and kickoff.month == 8:  # Month of  August
+            august_list.append({
+                "code": match.code,
+                "kickoff_day": kickoff.strftime("%Y-%m-%d"),
+                "kickoff_time": kickoff.strftime("%H:%M:%S"),
+            })
+
+    return Response(august_list)
+
+
+@api_view(["POST"])
+def dump_august(request):
+    
+    result = dump_august_matches()
+    return Response(result)

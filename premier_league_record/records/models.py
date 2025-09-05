@@ -20,3 +20,12 @@ class Match(models.Model):
 
     def __str__(self):
         return f"Match {self.code} (Event {self.event})"
+
+
+class AugustFixture(models.Model):
+    code = models.BigIntegerField(unique=True)
+    kickoff_day = models.DateField()
+    kickoff_time = models.TimeField()
+
+    def __str__(self):
+        return f"August Fixture {self.code} - {self.kickoff_day} {self.kickoff_time}"
