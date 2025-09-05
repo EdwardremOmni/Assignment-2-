@@ -34,17 +34,17 @@ def import_fixtures(request):
             finished=fixture.get("finished", False),
             finished_provisional=fixture.get("finished_provisional", False),
             kickoff_time=fixture.get("kickoff_time"),
-            minutes=fixture.get("minutes", 0),
+            minutes=fixture.get("minutes") or 0,
             provisional_start_time=fixture.get("provisional_start_time", False),
             started=fixture.get("started", False),
             team_a=fixture.get("team_a"),
-            team_a_score=fixture.get("team_a_score", 0),
+            team_a_score=fixture.get("team_a_score") if fixture.get("team_a_score") is not None else 0,
             team_h=fixture.get("team_h"),
-            team_h_score=fixture.get("team_h_score", 0),
+            team_h_score=fixture.get("team_h_score") if fixture.get("team_h_score") is not None else 0,
             stats=fixture.get("stats", []),
             team_h_difficulty=fixture.get("team_h_difficulty", 0),
             team_a_difficulty=fixture.get("team_a_difficulty", 0),
-            pulse_id=fixture.get("pulse_id", 0),
+            pulse_id=fixture.get("pulse_id", 0)
         )
         created += 1
 
